@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <ui:composition template="/private/template/template.xhtml">
+        <ui:define name="conteudo">
+            <p:panel id="panel" header="Categorias" style="margin: 20px;">
+                <p:dataTable value="#{categoriaMB.categorias}" var="categoria"
+                             emptyMessage="Nenhum registro encontrado" style="margin: 10px;"
+                             paginator="true" paginatorPosition="bottom" rows="10">
+                    <p:column headerText="Descrição" sortBy="#{categoria.descricao}">
+                        #{categoria.descricao}
+                    </p:column>
+                    <p:column headerText="Editar" width="80" style="text-align: center;">
+                        <p:commandButton action="#{categoriaMB.editar(categoria)}" icon="ui-icon-pencil" title="Editar"/>
+                    </p:column>
+                    <p:column headerText="Excluir" width="80" style="text-align: center;">
+                        <p:commandButton action="#{categoriaMB.excluir(categoria)}" icon="ui-icon-trash" title="Excluir"
+                                         onclick="if (!confirm('Confirma a exclusão?')) return false" update=":form:grow1"/>
+                    </p:column>
+                </p:dataTable>
+                <div align="center">
+                    <p:commandButton id="novo" value="Novo" action="#{categoriaMB.novo()}"/>
+                </div>
+            </p:panel>
+        </ui:define>
+    </ui:composition>
+</html>
+
