@@ -23,6 +23,7 @@ public class EquipeController implements Serializable{
     private EquipeService equipeService = new EquipeService();
 
     public EquipeController() {
+        listar();
     }
     
     public void listar(){

@@ -59,6 +59,14 @@ public class Piloto implements Serializable {
         this.equipe = equipe;
     }
 
+    public Integer getPontuacao() {
+        return pontuacao;
+    }
+
+    public void setPontuacao(Integer pontuacao) {
+        this.pontuacao = pontuacao;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 7;

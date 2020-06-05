@@ -6,41 +6,44 @@
 package br.com.F1.Controller;
 
 import br.com.F1.Domain.Equipe;
-import br.com.F1.Domain.Funcionario;
+import br.com.F1.Domain.Piloto;
 import br.com.F1.Service.EquipeService;
-import br.com.F1.Service.FuncionarioService;
+import br.com.F1.Service.PilotoService;
 import br.com.F1.Util.Mensagens;
 import java.io.Serializable;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
-@ManagedBean(name="funcionarioMB")
+@ManagedBean(name="pilotoMB")
 @SessionScoped
-public class FuncionarioController implements Serializable{
-    private List<Funcionario> listaFuncionario;
-    private Funcionario funcionario;
-    private FuncionarioService funcionarioService = new FuncionarioService();
+public class PilotoController implements Serializable{
+    
+    private List<Piloto> listaPiloto;
+    private Piloto piloto;
+    private PilotoService pilotoService = new PilotoService();
     private EquipeService equipeService = new EquipeService();
     private List<Equipe> equipes;
 
-    public FuncionarioController() {
+    public PilotoController() {
         listar();
-        this.funcionario = new Funcionario();
+        this.piloto = new Piloto();
     }
     
     public void listar(){
-        listaFuncionario = funcionarioService.Listar();//vai ser prenchida pelo service ele pede o dao e o dao buca no banco e manda para o controller.
+        listaPiloto = pilotoService.Listar();//vai ser prenchida pelo service ele pede o dao e o dao buca no banco e manda para o controller.
     }
 
     public String novo(){
         this.equipes = equipeService.Listar();
-        this.funcionario = new Funcionario();
+        this.piloto = new Piloto();
         return "new.xhtml?faces-redirect=true";
     }
     
     public String salva(){
-        if(funcionarioService.inserir(funcionario)){
+        if(piloto.getPontuacao() == null)
+            piloto.setPontuacao(0);
+        if(pilotoService.inserir(piloto)){
             Mensagens.mensagemSucesso("Sucesso", "Registro salvo com sucesso");
             listar();
             return "list.xhtml?faces-redirect=true";
@@ -50,17 +53,16 @@ public class FuncionarioController implements Serializable{
         
     }
     
-    public String editar(Funcionario funcionario){
-        this.funcionario = funcionario;
+    public String editar(Piloto piloto){
+        this.piloto = piloto;
         this.equipes = equipeService.Listar();
-
         return "alter.xhtml?faces-redirect=true";
     }
     
-    public String excluir( Funcionario funcionario){
-        if(funcionarioService.excluir(funcionario)){
+    public String excluir( Piloto piloto){
+        if(pilotoService.excluir(piloto)){
             Mensagens.mensagemSucesso("Sucesso", "Registro salvo com sucesso");
-            this.funcionario = new Funcionario();
+            this.piloto = new Piloto();
             listar();
             return voltar();
         }
@@ -69,7 +71,7 @@ public class FuncionarioController implements Serializable{
     }
     
     public String alterar(){
-        funcionarioService.alterar(funcionario);
+        pilotoService.alterar(piloto);
         listar();
         return voltar();
     }
@@ -82,28 +84,20 @@ public class FuncionarioController implements Serializable{
         return "list.xhtml?faces-redirect=true";
     }
 
-    public List<Funcionario> getListaFuncionario() {
-        return listaFuncionario;
+    public List<Piloto> getListaPiloto() {
+        return listaPiloto;
     }
 
-    public void setListaFuncionario(List<Funcionario> listaFuncionario) {
-        this.listaFuncionario = listaFuncionario;
+    public void setListaPiloto(List<Piloto> listaPiloto) {
+        this.listaPiloto = listaPiloto;
     }
 
-    public Funcionario getFuncionario() {
-        return funcionario;
+    public Piloto getPiloto() {
+        return piloto;
     }
 
-    public void setFuncionario(Funcionario funcionario) {
-        this.funcionario = funcionario;
-    }
-
-    public FuncionarioService getFuncionarioService() {
-        return funcionarioService;
-    }
-
-    public void setFuncionarioService(FuncionarioService funcionarioService) {
-        this.funcionarioService = funcionarioService;
+    public void setPiloto(Piloto piloto) {
+        this.piloto = piloto;
     }
 
     public List<Equipe> getEquipes() {
@@ -113,6 +107,7 @@ public class FuncionarioController implements Serializable{
     public void setEquipes(List<Equipe> equipes) {
         this.equipes = equipes;
     }
-    
+
+        
     
 }

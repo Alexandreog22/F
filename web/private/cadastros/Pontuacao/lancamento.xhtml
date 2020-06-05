@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    
+    <ui:composition template="/private/template/template.xhtml">
+        <ui:define name="conteudo">
+            <p:panel id="panel" header="Piloto" style="margin: 20px;">
+                <div class="ui-g">
+                    <div class="ui-g-4">
+                        <label>Colocação do piloto no Gp</label>
+                        <p:selectOneMenu id="qtd" value="#{pontuacaoMB.qtd}" style="width: 98%"
+                                         required="true" requiredMessage="Campo obrigatório">
+                            <f:selectItems value="#{pontuacaoMB.pontuacao}" var="p"
+                                           itemLabel="#{p.descricao}" itemValue="#{p.valor}"/>
+                        </p:selectOneMenu>
+                    </div>
+                    
+                    <div class="ui-g-4">
+                        <label>Piloto</label>
+                        <p:selectOneMenu id="equipe" value="#{pontuacaoMB.piloto}" style="width: 98%"
+                                         required="true" requiredMessage="Equipe é obrigatório"
+                                         converter="entityConverter">
+                            <f:selectItems value="#{pontuacaoMB.listaPiloto}" var="piloto"
+                                           itemLabel="#{piloto.nome}" itemValue="#{piloto}"/>
+                        </p:selectOneMenu>
+                    </div>
+                     <div align="center">
+                        <p:commandButton action="#{pontuacaoMB.lancar()}" value="Adicionar pontuação" update="growl" style="margin-right: 10px;"/>
+                        <p:commandButton action="#{pontuacaoMB.fecharGp()}" value="Gravar pontuação e exibir a colocação" immediate="true"/>
+                    </div>
+                    <br/>
+                    
+                </div>
+                <br/>
+                <div class="ui-g" >
+                    <p:dataList value="#{pontuacaoMB.listaGp}" var="gp" type="ordered">
+                        <f:facet name="header">
+                            Pontuações aguardando salvar
+                        </f:facet>
+                        Piloto : #{gp.piloto.nome},Pontuação #{gp.pontuacao}
+                    </p:dataList>
+                </div>
+                <br/>
+                <div class="ui-g">
+                    <h:outputText value="#{pontuacaoMB.result}" escape="false"/>
+                 </div>
+                <br/>
+               
+            </p:panel>
+        </ui:define>
+    </ui:composition>
+</html>
+
