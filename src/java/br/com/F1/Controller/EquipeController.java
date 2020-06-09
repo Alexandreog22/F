@@ -6,6 +6,7 @@
 package br.com.F1.Controller;
 
 import br.com.F1.Domain.Equipe;
+import br.com.F1.Domain.Piloto;
 import br.com.F1.Service.EquipeService;
 import br.com.F1.Util.Mensagens;
 import java.io.Serializable;
@@ -35,14 +36,28 @@ public class EquipeController implements Serializable{
         return "new.xhtml?faces-redirect=true";
     }
     
-    public String salva(){
-        if(equipeService.inserir(equipe)){
-            Mensagens.mensagemSucesso("Sucesso", "Registro salvo com sucesso");
-            listar();
-            return "list.xhtml?faces-redirect=true";
+    public Boolean comparaEquipe(){
+        for(Equipe e: listaEquipe){
+            if(equipe.getNome().equals(e.getNome())){
+                return true;
+            }
         }
-        Mensagens.mensagemErro("Erro", "Ocorreu um erro ao salvar o registro.");
-        return null ;
+        return false;
+    }
+    
+    public String salva(){
+        if(!comparaEquipe()){
+            if(equipeService.inserir(equipe)){
+                Mensagens.mensagemSucesso("Sucesso", "Registro salvo com sucesso");
+                listar();
+                return "list.xhtml?faces-redirect=true";
+            }
+            Mensagens.mensagemErro("Erro", "Ocorreu um erro ao salvar o registro.");
+            return null ;
+            
+        }
+        Mensagens.mensagemErro("Equipe já cadastrada", "Ocorreu um erro ao salvar o registro.");
+        return null ;  
         
     }
     

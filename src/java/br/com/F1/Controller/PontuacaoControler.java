@@ -10,6 +10,7 @@ import br.com.F1.Domain.Piloto;
 import br.com.F1.Domain.PontuacaoEnum;
 import br.com.F1.Service.PilotoService;
 import br.com.F1.Util.Mensagens;
+import java.awt.BorderLayout;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -38,12 +39,28 @@ public class PontuacaoControler implements Serializable{
         this.classificacao();
     }
     
+    public Boolean comparaPilotoPont(){
+        for(Gp gp: listaGp){
+            if(piloto.getNome().equals(gp.getPiloto().getNome()))
+                return true;
+            
+        }
+        return false;
+        
+    }
+    
+    
     
     public String lancar(){
-        this.listaPiloto = pilotoService.Listar();
-        this.listaGp.add(new Gp(piloto, qtd));
-        this.piloto = new Piloto();
-        this.qtd = 0;
+        if(!comparaPilotoPont()){
+            this.listaPiloto = pilotoService.Listar();
+            this.listaGp.add(new Gp(piloto, qtd));
+            this.piloto = new Piloto();
+            this.qtd = 0;
+            return "lancamento.xhtml?faces-redirect=true";
+        }
+        
+        Mensagens.mensagemErro("Piloto já cadastrado nesse GP!", "Piloto já cadastrado nesse GP!");
         return "lancamento.xhtml?faces-redirect=true";
     }
     
