@@ -42,34 +42,48 @@ public class PontuacaoControler implements Serializable{
     public Boolean comparaPilotoPont(){
         for(Gp gp: listaGp){
             if(piloto.getNome().equals(gp.getPiloto().getNome()))
-                return true;
-            
+                return true;  
         }
         return false;
-        
     }
     
-    
+    public Boolean verificaSeLacouMesmaColocacao(){
+        int cont = 0;
+        for(Gp gp: listaGp){
+            if(gp.getPontuacao().equals(this.qtd)){
+                cont++; 
+            }
+            if(cont == 1)
+                return true;
+        }
+        return false;
+    }
     
     public String lancar(){
-        if(!comparaPilotoPont()){
+        if(!comparaPilotoPont() && !verificaSeLacouMesmaColocacao()){
             this.listaPiloto = pilotoService.Listar();
             this.listaGp.add(new Gp(piloto, qtd));
             this.piloto = new Piloto();
             this.qtd = 0;
             return "lancamento.xhtml?faces-redirect=true";
         }
+        if(verificaSeLacouMesmaColocacao())
+            Mensagens.mensagemErro("Colocação já cadastrado nesse GP!", "Já foi lançado um piloto com está colocação");
+        else
+            Mensagens.mensagemErro("Piloto já cadastrado nesse GP!", "Piloto já cadastrado nesse GP!");
         
-        Mensagens.mensagemErro("Piloto já cadastrado nesse GP!", "Piloto já cadastrado nesse GP!");
         return "lancamento.xhtml?faces-redirect=true";
     }
     
     public String fecharGp(){
-        Mensagens.mensagemSucesso("Sucesso", "Registro salvo com sucesso");
-        pilotoService.lancaGp(listaGp);
-        classificacao = Boolean.TRUE;
-        this.listaGp.removeAll(listaGp);
-        this.classificacao();
+        if(listaGp.size() == this.listaPiloto.size()){
+            Mensagens.mensagemSucesso("Sucesso", "Registro salvo com sucesso");
+            pilotoService.lancaGp(listaGp);
+            classificacao = Boolean.TRUE;
+            this.listaGp.removeAll(listaGp);
+            this.classificacao();
+        }else
+            Mensagens.mensagemErro("É obrigatório lançar a colocação de todos os pilotos", "É obrigatório lançar a colocação de todos os pilotos");
         
         return "lancamento.xhtml?faces-redirect=true";
     }
